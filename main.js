@@ -9,12 +9,9 @@ fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetAll', {
        return;
    }
 
-   // ავიღოთ მხოლოდ 6 ოთახი
    const limitedRooms = Array.isArray(data) ? data.slice(0, 6) : [];
 
    const totalRooms = limitedRooms.length;
-
-   // ყველა ოთახის ბარათები (მხოლოდ 6)
    const cardsWrapper = document.createElement("div");
    cardsWrapper.style.display = "contents";
 
@@ -44,38 +41,38 @@ fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetAll', {
    countInfo.innerHTML = `<strong>ოთახების რაოდენობა: ${totalRooms}</strong>`;
    roomsContainer.appendChild(countInfo);
 
-   // TOP 3 რეიტინგული ოთახი (ამ 6–დან)
-   const topRatedRooms = limitedRooms
-       .filter(room => room.rating) 
-       .sort((a, b) => b.rating - a.rating)
-       .slice(0, 3);
+  
 
-   if (topRatedRooms.length > 0) {
-       const topRatedSection = document.createElement("div");
-       topRatedSection.style.gridColumn = "1 / -1";
-       topRatedSection.innerHTML = "<h3 style='text-align: center; margin-top: 40px; margin-bottom: 20px;'>⭐ საუკეთესო რეიტინგი (TOP 3)</h3>";
-       roomsContainer.appendChild(topRatedSection);
-
-       const topRatedContainer = document.createElement("div");
-       topRatedContainer.style.display = "contents";
-
-       topRatedRooms.forEach((room) => {
-           const topCard = document.createElement("div");
-           topCard.className = "roomcard top-rated";
-
-           topCard.innerHTML = `
-               <h3>⭐ ${room.name}</h3>
-               <p><strong>რეიტინგი:</strong> ${room.rating}</p>
-               <p><strong>ფასი:</strong> ${room.pricePerNight} $</p>
-           `;
-
-           topRatedContainer.appendChild(topCard);
-       });
-
-       roomsContainer.appendChild(topRatedContainer);
-   }
+   
 })
 .catch((error) => {
    console.error("შეცდომა:", error);
    document.getElementById("rooms").innerHTML = "<p style='color: red; padding: 20px;'>დაფიქსირდა შეცდომა მონაცემების ჩატვირთვისას</p>";
+});
+
+//hotels
+
+fetch('https://hotelbooking.stepprojects.ge/api/Hotels/GetAll')
+.then((response) => response.json())
+.then((data) => {
+   const roomsContainer = document.getElementById("hotels");
+   data.forEach((hotel) => {
+       const card = document.createElement("div");
+       card.className = "hotelrooms";
+       const firstRoom = hotel.rooms && hotel.rooms.length > 0 ? hotel.rooms[0] : null;
+       const price = `${hotel.rooms.pricePerNight}`
+       const image = hotel.featuredImage;
+       
+       card.innerHTML = `
+           <img src="${image}" alt="${hotel.name}" style="width: 100%; height: 200px; object-fit: cover;">
+           <h2>${hotel.name}</h2>
+           <p class="price"><strong>ფასი: ${hotel.rooms.pricePerNight} $</strong></p>
+           <p><strong>მისამართი:</strong> ${hotel.address}</p>
+           <p><strong>ქალაქი:</strong> ${hotel.city}</p>
+           <p><strong>ოთახების რაოდენობა:</strong> ${hotel.rooms ? hotel.rooms.length : 0}</p>
+           
+           
+       `;
+       roomsContainer.appendChild(card);
+   })
 });
