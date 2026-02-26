@@ -38,13 +38,13 @@ fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetAll', {
    countInfo.style.gridColumn = "1 / -1";
    countInfo.style.textAlign = "center";
    countInfo.style.padding = "20px";
-   countInfo.innerHTML = `<strong>ოთახების რაოდენობა: ${totalRooms}</strong>`;
-   roomsContainer.appendChild(countInfo);
 
   
 
    
 })
+
+
 .catch((error) => {
    console.error("შეცდომა:", error);
    document.getElementById("rooms").innerHTML = "<p style='color: red; padding: 20px;'>დაფიქსირდა შეცდომა მონაცემების ჩატვირთვისას</p>";
@@ -211,3 +211,16 @@ function formatText(text) {
     .replace(/`(.*?)`/g, "<code>$1</code>")           
     .replace(/\n/g, "<br>");                         
 }
+
+
+// Dark Mode Toggle
+const darkModeBtn = document.getElementById("darkModeBtn");
+darkModeBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+
+  if (document.body.classList.contains("dark-mode")) {
+    darkModeBtn.textContent = "☀️ Light Mode";
+  } else {
+    darkModeBtn.textContent = "🌙 Dark Mode";
+  }
+});

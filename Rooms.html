@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rooms</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div id="Logo-Div">
+      <img id="Logo" src="images/itStep.jpg" alt="itstep">
+    </div>
+
+    <nav>
+      <ul id="Nav-Bar">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="Rooms.html">Rooms</a></li>
+        <li><a href="Hotels.html">Hotels</a></li>
+        <li><a href="Booked.html">Booked Rooms</a></li>
+        <li style="display: flex; align-items: center; gap: 8px;">
+          <img src="images/192900656_ac7873c9-c8a1-4d19-b390-09c55a5726a8.jpeg" 
+               alt="tarry davis" 
+               style="width: 50px; height: 50px; border-radius: 50%;object-fit: fill;">
+          <a href="ai.html">სტაჟიორი თედო</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Dark Mode Toggle -->
+    <button id="darkModeBtn">🌙 Dark Mode</button>
+  </header>
+
+  <!-- Search & Sort Controls -->
+  <section id="controls">
+    <input type="text" id="searchInput" placeholder="Search by room name...">
+    <select id="sortSelect">
+      <option value="default">Sort by</option>
+      <option value="asc">Price: Low to High</option>
+      <option value="desc">Price: High to Low</option>
+    </select>
+
+    <!-- Price Range -->
+    <input type="number" id="minPrice" placeholder="Min Price">
+    <input type="number" id="maxPrice" placeholder="Max Price">
+    <button id="filterBtn">Filter</button>
+  </section>
+
+  <!-- Rooms Container -->
+  <main>
+    <div id="rooms"></div>
+  </main>
+
+  <footer>
+    <div id="footer-content">
+      <p>&copy; 2026 Luxury Hotels. All rights reserved.</p>
+      <ul id="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="Rooms.html">Rooms</a></li>
+        <li><a href="Hotels.html">Hotels</a></li>
+        <li><a href="Booked.html">Booked Rooms</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="rooms.js"></script>
+</body>
+</html>
