@@ -21,7 +21,7 @@ fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetAll', {
 });
 
 // Render function
-function renderRooms(rooms) {
+async function renderRooms(rooms) {
    const roomsContainer = document.getElementById("rooms");
    roomsContainer.innerHTML = "";
 

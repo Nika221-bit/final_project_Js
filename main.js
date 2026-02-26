@@ -150,7 +150,7 @@ async function sendMessage() {
 }
 
 // დამხმარე ფუნქციები
-function addMessage(text, type) {
+async function addMessage(text, type) {
   const welcome = chatMessages.querySelector(".welcome");
   if (welcome) {
     welcome.remove();
@@ -177,7 +177,7 @@ function addMessage(text, type) {
 
 
 // შეცდომის ჩვენება
-function showError(text) {
+async function showError(text) {
   const div = document.createElement("div");
   div.className = "message error";
   div.textContent = text;
@@ -186,7 +186,7 @@ function showError(text) {
 }
 
 // typing
-function showTyping() {
+async function showTyping() {
   const div = document.createElement("div");
   div.className = "message bot";
   div.innerHTML = `
@@ -203,7 +203,7 @@ function showTyping() {
 }
 
 // ტექსტის ფორმატირება
-function formatText(text) {
+async function formatText(text) {
   return text
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>") 
     .replace(/\*(.+?)\*/g, "<em>$1</em>")            
