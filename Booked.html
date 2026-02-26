@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booked Rooms</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #booking-form {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: 20px auto;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group select {
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #1c367e;
+      box-shadow: 0 0 5px rgba(28, 54, 126, 0.3);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    #bookBtn {
+      padding: 12px 30px;
+      background: linear-gradient(135deg, #76f6ff, #1c367e);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    #bookBtn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(28, 54, 126, 0.3);
+    }
+
+    #bookBtn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    #booked-rooms {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .booked-card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-left: 5px solid #76f6ff;
+    }
+
+    .booked-card h3 {
+      color: #1c367e;
+      margin-bottom: 15px;
+    }
+
+    .booking-info {
+      margin: 10px 0;
+      color: #666;
+    }
+
+    .booking-info strong {
+      color: #333;
+    }
+
+    .cancel-booking {
+      padding: 8px 15px;
+      background: #ff4444;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: 0.3s;
+    }
+
+    .cancel-booking:hover {
+      background: #cc0000;
+    }
+
+    .empty-message {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+      font-size: 18px;
+    }
+
+    .success-message {
+      background: #4caf50;
+      color: white;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px;
+      text-align: center;
+    }
+
+    body.dark-mode #booking-form,
+    body.dark-mode .booked-card {
+      background-color: #1e1e1e;
+      color: #ddd;
+    }
+
+    body.dark-mode .form-group label {
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .form-group input,
+    body.dark-mode .form-group select {
+      background-color: #2a2a2a;
+      color: #e0e0e0;
+      border-color: #444;
+    }
+
+    body.dark-mode .booking-info {
+      color: #bbb;
+    }
+
+    body.dark-mode .booking-info strong {
+      color: #e0e0e0;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      #booking-form {
+        padding: 20px;
+        margin: 20px 10px;
+      }
+
+      .booked-card {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div id="Logo-Div">
+      <img id="Logo" src="images/itStep.jpg" alt="itstep">
+    </div>
+
+    <nav>
+      <ul id="Nav-Bar">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="Rooms.html">Rooms</a></li>
+        <li><a href="Hotels.html">Hotels</a></li>
+        <li><a href="Booked.html">Booked Rooms</a></li>
+        <li style="display: flex; align-items: center; gap: 8px;">
+          <img src="images/192900656_ac7873c9-c8a1-4d19-b390-09c55a5726a8.jpeg" 
+               alt="tarry davis" 
+               style="width: 50px; height: 50px; border-radius: 50%;object-fit: fill;">
+          <a href="ai.html">სტაჟიორი თედო</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Dark Mode Toggle -->
+    <button id="darkModeBtn">🌙 Dark Mode</button>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Booking Form -->
+    <div id="booking-form">
+      <h2>ოთახის დაჯავშნა</h2>
+      
+      <div class="form-group">
+        <label for="roomSelect">აირჩიეთ ოთახი *</label>
+        <select id="roomSelect" required>
+          <option value="">-- აირჩიეთ ოთახი --</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="checkInDate">შესვლის თარიღი *</label>
+          <input type="date" id="checkInDate" required>
+        </div>
+        <div class="form-group">
+          <label for="checkOutDate">გასვლის თარიღი *</label>
+          <input type="date" id="checkOutDate" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="clientName">კლიენტის სახელი *</label>
+          <input type="text" id="clientName" placeholder="სახელი" required>
+        </div>
+        <div class="form-group">
+          <label for="clientPhone">ტელეფონის ნომერი *</label>
+          <input type="tel" id="clientPhone" placeholder="+995 XXX XXX XXX" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="clientEmail">ელ-ფოსტა</label>
+        <input type="email" id="clientEmail" placeholder="example@mail.com">
+      </div>
+
+      <button id="bookBtn">დაჯავშნა</button>
+    </div>
+
+    <!-- Booked Rooms Section -->
+    <section>
+      <h2 style="text-align: center; margin-top: 40px; margin-bottom: 30px;">დაჯავშნული ოთახები</h2>
+      <div id="booked-rooms"></div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div id="footer-content">
+      <p>&copy; 2026 Luxury Hotels. All rights reserved.</p>
+      <ul id="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="Rooms.html">Rooms</a></li>
+        <li><a href="Hotels.html">Hotels</a></li>
+        <li><a href="Booked.html">Booked Rooms</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="booked.js"></script>
+</body>
+</html>

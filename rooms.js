@@ -38,9 +38,23 @@ function renderRooms(rooms) {
            <p><strong>სტუმრების მაქსიმუმი:</strong> ${room.maximumGuests}</p>
            <p><strong>ხელმისაწვდომია?:</strong> ${room.available ? "დიახ" : "არა"}</p>
            <p><strong>ოთახის ნომერი:</strong> N${room.id}</p>
+           <button class="book-btn" data-room-id="${room.id}" style="padding: 10px 15px; margin-top: 10px; background: linear-gradient(135deg, #76f6ff, #1c367e); color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: 0.3s; width: 100%;">📅 დაჯავშნა</button>
        `;
 
        roomsContainer.appendChild(card);
+   });
+
+   // Add event listeners to book buttons
+   document.querySelectorAll('.book-btn').forEach(btn => {
+       btn.addEventListener('click', (e) => {
+           const roomId = e.target.getAttribute('data-room-id');
+           const room = allRooms.find(r => r.id == roomId);
+           
+           // Store selected room in sessionStorage and redirect to Booked.html
+           sessionStorage.setItem('selectedRoomId', roomId);
+           sessionStorage.setItem('selectedRoomName', room.name);
+           window.location.href = 'Booked.html';
+       });
    });
 }
 
