@@ -88,5 +88,11 @@ document.getElementById("filterBtn").addEventListener("click", () => {
    renderRooms(filtered);
 });
 
+const burgerBtn = document.getElementById("burgerBtn");
+const navBar = document.getElementById("Nav-Bar");
+
+burgerBtn.addEventListener("click", () => {
+  navBar.classList.toggle("show");
+});
 
 

@@ -212,6 +212,13 @@ async function formatText(text) {
     .replace(/\n/g, "<br>");                         
 }
 
+const burgerBtn = document.getElementById("burgerBtn");
+const navBar = document.getElementById("Nav-Bar");
+
+burgerBtn.addEventListener("click", () => {
+  navBar.classList.toggle("show");
+});
+
 
 
 

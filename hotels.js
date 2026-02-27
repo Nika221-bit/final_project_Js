@@ -24,5 +24,12 @@ fetch('https://hotelbooking.stepprojects.ge/api/Hotels/GetAll')
        roomsContainer.appendChild(card);
    })
 });
+const burgerBtn = document.getElementById("burgerBtn");
+const navBar = document.getElementById("Nav-Bar");
+
+burgerBtn.addEventListener("click", () => {
+  navBar.classList.toggle("show");
+});
+
 
 

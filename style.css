@@ -459,6 +459,42 @@ body.dark-mode .auth-form input {
   }
 }
 
+/* ბურგერ ღილაკი თავიდან დამალულია */
+#burgerBtn {
+  display: none;
+  font-size: 26px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Desktop view */
+#Nav-Bar {
+  display: flex;
+  gap: 16px;
+}
+
+/* Responsive view */
+@media (max-width: 768px) {
+  #burgerBtn {
+    display: block;
+  }
+
+  #Nav-Bar {
+    display: none;
+    flex-direction: column;
+    background: #f0f0f0;
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  #Nav-Bar.show {
+    display: flex;
+  }
+}
 /* ტაბლეტებისთვის */
 @media (min-width: 601px) and (max-width: 1024px) {
   #rooms {
