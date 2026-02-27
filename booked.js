@@ -117,6 +117,28 @@ document.getElementById('bookBtn').addEventListener('click', () => {
         alert('არასწორი ელ-ფოსტა');
         return;
     }
+    const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const checkInValue = document.getElementById('checkInDate').value;
+const checkOutValue = document.getElementById('checkOutDate').value;
+
+const checkIn1 = new Date(checkInValue);
+const checkOut1 = new Date(checkOutValue);
+
+if (checkIn1 < today) {
+    alert("შესვლის თარიღი არ შეიძლება იყოს წარსულში");
+    return;
+}
+if (checkOut1 < today) {
+    alert("გასვლის თარიღი არ შეიძლება იყოს წარსულში");
+    return;
+}
+if (checkOut1 <= checkIn1) {
+    alert("გასვლის თარიღი უნდა იყოს შესვლის თარიღის შემდეგ");
+    return;
+}
+
 
     // Check if dates are valid
     const checkIn = new Date(checkInDate);
@@ -175,6 +197,7 @@ document.getElementById('bookBtn').addEventListener('click', () => {
     document.getElementById('clientPhone').value = '';
     document.getElementById('clientEmail').value = '';
 });
+
 
 // Display bookings
 function displayBookings() {
