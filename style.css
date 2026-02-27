@@ -292,6 +292,76 @@ body.dark-mode footer a {
   color: #e0e0e0 !important;
   background-color: transparent;
 }
+/* Authentication form styles */
+.auth-form {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 400px;
+  margin: 40px auto;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.auth-form h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #1c367e;
+}
+.auth-form .form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+.auth-form .form-group label {
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+.auth-form .form-group input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.auth-form button {
+  padding: 10px 20px;
+  width: 100%;
+  background: linear-gradient(135deg, #76f6ff, #1c367e);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.auth-form button:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* message box inside auth forms */
+.auth-form #loginMessage,
+.auth-form #registerMessage {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+}
+
+/* adjust nav user text */
+.nav-user {
+  font-weight: 600;
+  color: #333;
+}
+
+/* dark mode for auth forms */
+body.dark-mode .auth-form {
+  background-color: #1e1e1e;
+  color: #ddd;
+}
+body.dark-mode .auth-form input {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border-color: #444;
+}
+
 /* Responsive Layout  */
 
 /* მობილური ეკრანებისთვის */
