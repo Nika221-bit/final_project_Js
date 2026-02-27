@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = 'index.html';
     return;
   }
+
   const form = document.getElementById('registerForm');
   const msgDiv = document.getElementById('registerMessage');
 
@@ -23,11 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // Payload უნდა ემთხვეოდეს Swagger–ში მითითებულ მოდელს
     const payload = {
-      name,
-      phoneNumber: phone,
-      email,
-      password
+      fullName: name,
+      phone: phone,
+      email: email,
+      password: password
     };
 
     async function safeJson(response) {
@@ -36,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const res = await fetch('https://hotelbooking.stepprojects.ge/api/Users/register', {
+      const res = await fetch('https://rentcar.stepprojects.ge/api/Users/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -59,6 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// Burger menu toggle
 const burgerBtn = document.getElementById("burgerBtn");
 const navBar = document.getElementById("Nav-Bar");
 

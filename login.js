@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // example call to favorite cars endpoint
         const tokenStored = data.token || data.accessToken || '';
-        fetch(`https://hotelbooking.stepprojects.ge/api/Users/${encodeURIComponent(phone)}/favorite-cars`, {
+        fetch(`https://rentcar.stepprojects.ge//api/Users/${encodeURIComponent(phone)}/favorite-cars`, {
           headers: tokenStored ? { 'Authorization': `Bearer ${tokenStored}` } : {}
         })
           .then(async r => {
