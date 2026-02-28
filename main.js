@@ -150,7 +150,7 @@ async function sendMessage() {
 }
 
 // დამხმარე ფუნქციები
-async function addMessage(text, type) {
+function addMessage(text, type) {
   const welcome = chatMessages.querySelector(".welcome");
   if (welcome) {
     welcome.remove();
