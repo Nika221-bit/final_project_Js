@@ -338,6 +338,12 @@ body.dark-mode footer a {
   color: #e0e0e0 !important;
   background-color: transparent;
 }
+body.dark-mode #Nav-Bar {
+  background-color: #1e1e1e;
+  border: 1px solid #444;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
 /* Authentication form styles */
 .auth-form {
   background: white;
@@ -422,9 +428,13 @@ body.dark-mode .auth-form input {
     flex-direction: column;
     gap: 10px;
   }
-
+  
   #Nav-Bar li a {
     font-size: 14px;
+  }
+
+  #Nav-Bar.dark-mode {
+    background-color: #1e1e1e;
   }
 
   #Div1 {
@@ -483,7 +493,7 @@ body.dark-mode .auth-form input {
   #Nav-Bar {
     display: none;
     flex-direction: column;
-    background: #f0f0f0;
+    background: #ffffff;
     position: absolute;
     top: 60px;
     right: 10px;
