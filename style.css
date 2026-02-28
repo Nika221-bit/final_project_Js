@@ -338,11 +338,7 @@ body.dark-mode footer a {
   color: #e0e0e0 !important;
   background-color: transparent;
 }
-body.dark-mode #Nav-Bar {
-  background-color: #1e1e1e;
-  border: 1px solid #444;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-}
+
 
 /* Authentication form styles */
 .auth-form {
@@ -433,10 +429,11 @@ body.dark-mode .auth-form input {
     font-size: 14px;
   }
 
-  #Nav-Bar.dark-mode {
-    background-color: #1e1e1e;
-  }
-
+body.dark-mode #Nav-Bar {
+  background-color: #1e1e1e;
+  border: 1px solid #444;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
   #Div1 {
     height: 200px;
     font-size: 0.9rem;
