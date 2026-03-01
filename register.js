@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
       email,
       password,
       role:'user'
+
     };
 
     try {
