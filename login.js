@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // თუ უკვე დალოგინებულია
   if (localStorage.getItem("authToken")) {
     window.location.href = "index.html";
     return;
@@ -9,12 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("loginForm");
   const msgDiv = document.getElementById("loginMessage");
 
+  if (!form) return;
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-
     msgDiv.textContent = "";
 
-    const email = document.getElementById("email").value.trim();
+    const phoneNumber = document.getElementById("phone").value.trim();
     const password = document.getElementById("password").value;
 
     try {
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ phoneNumber, password })
       });
 
       const data = await res.json();
@@ -31,14 +31,23 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!res.ok) {
         msgDiv.textContent = data.message || "Login failed";
         msgDiv.style.color = "red";
+        console.log(data);
         return;
       }
 
-      // Token შენახვა
-      localStorage.setItem("authToken", data.token);
-      localStorage.setItem("userEmail", email);
+      // 🔥 Swagger-ში token ხშირად მოდის data.token ან data.accessToken
+      const token = data.token || data.accessToken;
 
-      msgDiv.textContent = "Login successful! Redirecting...";
+      if (!token) {
+        msgDiv.textContent = "Token not returned from server";
+        msgDiv.style.color = "red";
+        console.log(data);
+        return;
+      }
+
+      localStorage.setItem("authToken", token);
+
+      msgDiv.textContent = "Login successful!";
       msgDiv.style.color = "green";
 
       setTimeout(() => {
@@ -48,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       msgDiv.textContent = "Error: " + err.message;
       msgDiv.style.color = "red";
+      console.error(err);
     }
   });
 });
