@@ -96,3 +96,13 @@ burgerBtn.addEventListener("click", () => {
 });
 
 
+document.getElementById("citySelect").addEventListener("change", (e) => {
+   const selectedCity = e.target.value;
+   let filteredRooms = [...allRooms];
+
+   if (selectedCity !== "all") {
+       filteredRooms = allRooms.filter(room => room.city === selectedCity);
+   }
+
+   renderRooms(filteredRooms);
+});
