@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // redirect if already logged in
   if (localStorage.getItem('authToken')) {
     window.location.href = 'index.html';
     return;
@@ -12,8 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     msgDiv.textContent = '';
 
-    const name = document.getElementById('name').value.trim();
-    const phone = document.getElementById('phone').value.trim();
+    const fullName = document.getElementById('name').value.trim();
+    const phoneNumber = document.getElementById('phone').value.trim();
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const confirm = document.getElementById('confirmPassword').value;
@@ -24,19 +23,19 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Payload უნდა ემთხვეოდეს Swagger–ში მითითებულ მოდელს
-    const payload = {
-      fullName: name,
-      phone: phone,
-      email: email,
-      password: password,
-      role: 'User'
-    };
+    // fullname გავყოთ firstName და lastName-ზე
+    const nameParts = fullName.split(' ');
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
 
-    async function safeJson(response) {
-      const t = await response.text();
-      try { return t ? JSON.parse(t) : {}; } catch (_){ return {}; }
-    }
+    const payload = {
+      firstName,
+      lastName,
+      phoneNumber,
+      email,
+      password,
+      role:'user'
+    };
 
     try {
       const res = await fetch('https://rentcar.stepprojects.ge/api/Users/register', {
@@ -45,13 +44,16 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify(payload)
       });
 
-      const data = await safeJson(res);
+      const data = await res.json();
+
       if (!res.ok) {
         msgDiv.textContent = data.message || 'Registration failed';
         msgDiv.style.color = 'red';
+        console.log(data);
       } else {
         msgDiv.textContent = 'Registered successfully. Redirecting to login...';
         msgDiv.style.color = 'green';
+
         setTimeout(() => {
           window.location.href = 'login.html';
         }, 2000);
@@ -70,3 +72,4 @@ const navBar = document.getElementById("Nav-Bar");
 burgerBtn.addEventListener("click", () => {
   navBar.classList.toggle("show");
 });
+
