@@ -29,7 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
       fullName: name,
       phone: phone,
       email: email,
-      password: password
+      password: password,
+      role: 'User'
     };
 
     async function safeJson(response) {
