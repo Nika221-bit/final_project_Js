@@ -26,11 +26,19 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         body: JSON.stringify({
           phoneNumber: phoneNumber,
-          password: password
+          password: password,
+          role: "user"
         })
       });
 
-      const data = await res.json();
+      // ვკითხულობთ როგორც ტექსტს
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = { message: text };
+      }
 
       if (!res.ok) {
         msgDiv.textContent = data?.message || "Login failed";
@@ -60,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       msgDiv.textContent = "Network error";
       msgDiv.style.color = "red";
-      console.error(err);
+      console.error("Fetch error:", err);
     }
   });
 });
