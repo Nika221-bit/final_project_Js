@@ -33,7 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
       lastName,
       phoneNumber,
       email,
-      password
+      password,
+      role:"user"
     };
 
     try {
