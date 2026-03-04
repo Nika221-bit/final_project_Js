@@ -14,12 +14,12 @@ function saveBookings() {
 }
 
 // Fetch rooms and populate dropdown
-fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetAll', {
+fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetRoom/1', {
     method: 'GET'
 })
 .then((response) => response.json())
 .then((data) => {
-    allRooms = Array.isArray(data) ? data : [];
+    allRooms = Array.isArray(data) ? data : [data];
     populateRoomDropdown();
     loadBookings();
 })
@@ -28,7 +28,7 @@ fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetAll', {
 });
 
 // Populate room dropdown
-function populateRoomDropdown() {
+async function populateRoomDropdown() {
     const roomSelect = document.getElementById('roomSelect');
     roomSelect.innerHTML = '<option value="">-- აირჩიეთ ოთახი --</option>';
     

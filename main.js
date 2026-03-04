@@ -1,4 +1,4 @@
-fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetAll', {
+fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetRoom/1', {
    method: 'GET'
 })
 .then((response) => response.json())
@@ -9,7 +9,7 @@ fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetAll', {
        return;
    }
 
-   const limitedRooms = Array.isArray(data) ? data.slice(0, 6) : [];
+   const limitedRooms = Array.isArray(data) ? data.slice(0, 6) : [data];
 
    const totalRooms = limitedRooms.length;
    const cardsWrapper = document.createElement("div");
