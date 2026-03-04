@@ -233,6 +233,17 @@ footer {
   transition: 0.3s;
 }
 
+#citySelect {
+  margin: 10px;
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: none;
+  background: linear-gradient(135deg, #76f6ff, #1c367e);
+  color: rgb(60, 60, 60);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
 #filterBtn:hover {
   transform: scale(1.05);
   background: linear-gradient(135deg, #1c367e, #76f6ff);

@@ -14,7 +14,6 @@ fetch('https://hotelbooking.stepprojects.ge/api/Hotels/GetAll')
            <h2>${hotel.name}</h2>
            <p><strong>მისამართი:</strong> ${hotel.address}</p>
            <p><strong>ქალაქი:</strong> ${hotel.city}</p>
-           <p><strong>ოთახების რაოდენობა:</strong> ${hotel.rooms ? hotel.rooms.length : 0}</p>
 <button style="padding: 10px 15px; margin-top: 10px; background: linear-gradient(135deg, #76f6ff, #1c367e); border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: 0.3s; width: 100%;">
                <a href="Rooms.html?hotelId=${hotel.id}" style="color: white; text-decoration: none; display: block; width: 100%;">ოთახების ნახვა</a>
            </button>           
@@ -32,5 +31,16 @@ burgerBtn.addEventListener("click", () => {
   navBar.classList.toggle("show");
 });
 
+        //    <p><strong>ოთახების რაოდენობა:</strong> ${hotel.rooms ? hotel.rooms.length : 0}</p>
 
+        document.getElementById("citySelect").addEventListener("change", (e) => {
+   const selectedCity = e.target.value;
+   let filteredRooms = [...allRooms];
+
+   if (selectedCity !== "all") {
+       filteredRooms = allRooms.filter(room => room.city === selectedCity);
+   }
+
+   renderRooms(filteredRooms);
+});
 
