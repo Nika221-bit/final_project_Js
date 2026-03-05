@@ -61,6 +61,61 @@ fetch('https://hotelbooking.stepprojects.ge/api/Hotels/GetAll')
    })
 });
 
+// API Helper Functions
+async function fetchHotels() {
+  try {
+    const response = await fetch('https://hotelbooking.stepprojects.ge/api/Hotels/GetAll');
+    return await response.json();
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
+async function fetchHotel(id) {
+  try {
+    const response = await fetch(`https://hotelbooking.stepprojects.ge/api/Hotels/GetHotel/${id}`);
+    return await response.json();
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
+async function fetchCities() {
+  try {
+    const response = await fetch('https://hotelbooking.stepprojects.ge/api/Hotels/GetCities');
+    return await response.json();
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
+async function fetchRooms() {
+  try {
+    const response = await fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetAll');
+    return await response.json();
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
+async function fetchAvailableRooms() {
+  try {
+    const response = await fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetAvailableRooms');
+    return await response.json();
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
+async function fetchRoomTypes() {
+  try {
+    const response = await fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetRoomTypes');
+    return await response.json();
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
 // თედო 
 const chatMessages = document.getElementById("chatMessages");
 const userInput = document.getElementById("userInput");
@@ -82,7 +137,7 @@ async function sendMessage() {
   }
 
   // მომხმარებლის მესიჯის ჩვენება
-  addMessage(message, "user");
+  await addMessage(message, "user");
   userInput.value = "";
   sendButton.disabled = true;
 
@@ -90,6 +145,30 @@ async function sendMessage() {
   const typing = showTyping();
 
   try {
+    // ინფორმაციის მოხსნა API-დან
+    let apiData = "";
+    
+    if (message.toLowerCase().includes("სასტუმრო") || message.toLowerCase().includes("hotel")) {
+      const hotels = await fetchHotels();
+      apiData = "\n\nხელმისაწვდომი სასტუმროები:\n" + JSON.stringify(hotels, null, 2);
+    }
+    if (message.toLowerCase().includes("ოთახი") || message.toLowerCase().includes("room")) {
+      const rooms = await fetchRooms();
+      apiData += "\n\nხელმისაწვდომი ოთახები:\n" + JSON.stringify(rooms, null, 2);
+    }
+    if (message.toLowerCase().includes("ხელმისაწვდომი")) {
+      const available = await fetchAvailableRooms();
+      apiData += "\n\nხელმისაწვდომი ოთახები:\n" + JSON.stringify(available, null, 2);
+    }
+    if (message.toLowerCase().includes("ქალაქი") || message.toLowerCase().includes("city")) {
+      const cities = await fetchCities();
+      apiData += "\n\nქალაქები:\n" + JSON.stringify(cities, null, 2);
+    }
+    if (message.toLowerCase().includes("ტიპი") || message.toLowerCase().includes("type")) {
+      const types = await fetchRoomTypes();
+      apiData += "\n\nოთახის ტიპები:\n" + JSON.stringify(types, null, 2);
+    }
+
     const MODEL = "gemini-2.5-flash";
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`;
 
@@ -103,7 +182,14 @@ async function sendMessage() {
           {
             parts: [
               {
-                text: message,
+                text: `You are a Hotel Booking assistant. You can only answer questions about Hotel Booking API data.
+
+Here is the current API data:
+${apiData}
+
+User question: ${message}
+
+If the question is not related to hotels, rooms, cities or booking, respond: "მხოლოდ Hotel Booking API-ს შესახებ შემიძლია დახმარება"`,
               },
             ],
           },
@@ -112,21 +198,26 @@ async function sendMessage() {
     });
 
     const data = await response.json();
-
     typing.remove();
 
     if (!response.ok) {
       const errorMsg = data.error?.message || "მოხდა შეცდომა";
+      console.error("API Error:", errorMsg, data);
       showError(errorMsg);
       return;
-    } else {
-      const botReply =
-        data.candidates?.[0]?.content?.parts?.[0]?.text ||
-        "მოხდა შეცდომა პასუხის მიღებისას";
-      addMessage(botReply, "bot");
     }
+
+    if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
+      console.error("Invalid response structure:", data);
+      showError("პასუხი მიღებული არაა სწორი ფორმატში");
+      return;
+    }
+
+    const botReply = data.candidates[0].content.parts[0].text || "მოხდა შეცდომა პასუხის მიღებისას";
+    await addMessage(botReply, "bot");
   } catch (error) {
     typing.remove();
+    console.error("Fetch error:", error);
     showError("მოხდა შეცდომა: " + error.message);
   }
   sendButton.disabled = false;
@@ -134,7 +225,7 @@ async function sendMessage() {
 }
 
 // დამხმარე ფუნქციები
-function addMessage(text, type) {
+async function addMessage(text, type) {
   const welcome = chatMessages.querySelector(".welcome");
   if (welcome) {
     welcome.remove();
@@ -144,9 +235,10 @@ function addMessage(text, type) {
   div.className = `message ${type}`;
 
   if (type === "bot") {
+    const formattedText = await formatText(text);
     div.innerHTML = `
       <div class="label">🤖 Gemini </div>
-      ${formatText(text)}
+      ${formattedText}
     `;
   } else {
     div.innerHTML = `
@@ -170,7 +262,7 @@ async function showError(text) {
 }
 
 // typing
-async function showTyping() {
+function showTyping() {
   const div = document.createElement("div");
   div.className = "message bot";
   div.innerHTML = `
