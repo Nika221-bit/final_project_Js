@@ -1,11 +1,41 @@
 let allRooms = [];
 let allBookings = [];
 
-// Load bookings from localStorage
+// Load bookings from API or localStorage as fallback
 function loadBookings() {
-    const saved = localStorage.getItem('hotelBookings');
-    allBookings = saved ? JSON.parse(saved) : [];
-    displayBookings();
+    fetch('https://hotelbooking.stepprojects.ge/api/Booking')
+    .then(response => response.json())
+    .then(data => {
+        allBookings = data.map(apiBooking => {
+            const room = allRooms.find(r => r.id == apiBooking.roomID);
+            const checkIn = new Date(apiBooking.checkInDate);
+            const checkOut = new Date(apiBooking.checkOutDate);
+            const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+            return {
+                id: apiBooking.id,
+                apiId: apiBooking.id,
+                roomId: apiBooking.roomID,
+                roomName: room ? room.name : 'Unknown',
+                roomPrice: room ? room.pricePerNight : 0,
+                checkInDate: apiBooking.checkInDate.split('T')[0],
+                checkOutDate: apiBooking.checkOutDate.split('T')[0],
+                nights: nights,
+                totalPrice: apiBooking.totalPrice,
+                clientName: apiBooking.customerName || '',
+                clientPhone: apiBooking.customerPhone || '',
+                clientEmail: apiBooking.customerId || '',
+                bookingDate: new Date().toLocaleDateString('ka-GE')
+            };
+        });
+        saveBookings();
+        displayBookings();
+    })
+    .catch(error => {
+        console.error('Failed to load from API, using localStorage:', error);
+        const saved = localStorage.getItem('hotelBookings');
+        allBookings = saved ? JSON.parse(saved) : [];
+        displayBookings();
+    });
 }
 
 // Save bookings to localStorage
@@ -181,21 +211,53 @@ if (checkOut1 <= checkIn1) {
         bookingDate: new Date().toLocaleDateString('ka-GE')
     };
 
-    // Add booking
-    allBookings.push(booking);
-    saveBookings();
-    displayBookings();
+    // Prepare API booking data
+    const apiBooking = {
+        roomID: parseInt(roomId),
+        checkInDate: new Date(checkInDate + 'T00:00:00').toISOString(),
+        checkOutDate: new Date(checkOutDate + 'T23:59:59').toISOString(),
+        totalPrice: totalPrice,
+        isConfirmed: true,
+        customerName: clientName,
+        customerId: clientEmail || null,
+        customerPhone: clientPhone
+    };
 
-    // Show success message
-    showSuccessMessage(`ოთახი წარმატებით დაჯავშნეთ! ჯამი: $${totalPrice}`);
-
-    // Reset form
-    document.getElementById('roomSelect').value = '';
-    document.getElementById('checkInDate').value = '';
-    document.getElementById('checkOutDate').value = '';
-    document.getElementById('clientName').value = '';
-    document.getElementById('clientPhone').value = '';
-    document.getElementById('clientEmail').value = '';
+    // Send to API
+    fetch('https://hotelbooking.stepprojects.ge/api/Booking', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(apiBooking)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Booking failed');
+        }
+        return response.json().catch(() => ({}));
+    })
+    .then(data => {
+        booking.id = data.id;
+        booking.apiId = data.id;
+        // Add to local
+        allBookings.push(booking);
+        saveBookings();
+        displayBookings();
+        // Show success message
+        showSuccessMessage(`ოთახი წარმატებით დაჯავშნეთ! ჯამი: $${totalPrice}`);
+        // Reset form
+        document.getElementById('roomSelect').value = '';
+        document.getElementById('checkInDate').value = '';
+        document.getElementById('checkOutDate').value = '';
+        document.getElementById('clientName').value = '';
+        document.getElementById('clientPhone').value = '';
+        document.getElementById('clientEmail').value = '';
+    })
+    .catch(error => {
+        console.error(error);
+        alert('დაჯავშნა ვერ მოხერხდა. სცადეთ თავიდან.');
+    });
 });
 
 
@@ -209,7 +271,10 @@ function displayBookings() {
         return;
     }
 
-    allBookings.forEach(booking => {
+    // Sort by id descending (newest first) and take first 3
+    const displayedBookings = allBookings.sort((a, b) => b.id - a.id).slice(0, 3);
+
+    displayedBookings.forEach(booking => {
         const card = document.createElement('div');
         card.className = 'booked-card';
         card.innerHTML = `
@@ -249,11 +314,24 @@ function displayBookings() {
 
 // Cancel booking
 function cancelBooking(bookingId) {
+    const booking = allBookings.find(b => b.id === bookingId);
+    if (!booking) return;
     if (confirm('დარწმუნებული ხართ, რომ გსურთ დაჯავშნის გაუქმება?')) {
-        allBookings = allBookings.filter(b => b.id !== bookingId);
-        saveBookings();
-        displayBookings();
-        showSuccessMessage('დაჯავშნა წარმატებით გაუქმდა');
+        const deletePromise = booking.apiId ? 
+            fetch(`https://hotelbooking.stepprojects.ge/api/Booking/${booking.apiId}`, {
+                method: 'DELETE'
+            }).then(response => {
+                if (!response.ok) {
+                    console.error('Failed to delete from API');
+                }
+            }).catch(error => console.error(error)) : 
+            Promise.resolve();
+        deletePromise.then(() => {
+            allBookings = allBookings.filter(b => b.id !== bookingId);
+            saveBookings();
+            displayBookings();
+            showSuccessMessage('დაჯავშნა წარმატებით გაუქმდა');
+        });
     }
 }
 
