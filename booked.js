@@ -14,12 +14,12 @@ function saveBookings() {
 }
 
 // Fetch rooms and populate dropdown
-fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetRoom/1', {
+fetch('https://hotelbooking.stepprojects.ge/api/Hotels/GetHotel/1', {
     method: 'GET'
 })
 .then((response) => response.json())
 .then((data) => {
-    allRooms = Array.isArray(data) ? data : [data];
+    allRooms = data.rooms && Array.isArray(data.rooms) ? data.rooms : [];
     populateRoomDropdown();
     loadBookings();
 })

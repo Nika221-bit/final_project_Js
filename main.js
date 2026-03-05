@@ -1,4 +1,4 @@
-fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetRoom/1', {
+fetch('https://hotelbooking.stepprojects.ge/api/Hotels/GetHotel/1', {
    method: 'GET'
 })
 .then((response) => response.json())
@@ -9,13 +9,11 @@ fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetRoom/1', {
        return;
    }
 
-   const limitedRooms = Array.isArray(data) ? data.slice(0, 6) : [data];
-
-   const totalRooms = limitedRooms.length;
+   const roomsList = data.rooms && Array.isArray(data.rooms) ? data.rooms.slice(0, 6) : [];
    const cardsWrapper = document.createElement("div");
    cardsWrapper.style.display = "contents";
 
-   limitedRooms.forEach((room) => {
+   roomsList.forEach((room) => {
        const card = document.createElement("div");
        card.className = "roomcard";
 
@@ -34,17 +32,7 @@ fetch('https://hotelbooking.stepprojects.ge/api/Rooms/GetRoom/1', {
    });
 
    roomsContainer.appendChild(cardsWrapper);
-   const countInfo = document.createElement("div");
-   countInfo.style.gridColumn = "1 / -1";
-   countInfo.style.textAlign = "center";
-   countInfo.style.padding = "20px";
-
-  
-
-   
 })
-
-
 .catch((error) => {
    console.error("შეცდომა:", error);
    document.getElementById("rooms").innerHTML = "<p style='color: red; padding: 20px;'>დაფიქსირდა შეცდომა მონაცემების ჩატვირთვისას</p>";
@@ -60,19 +48,15 @@ fetch('https://hotelbooking.stepprojects.ge/api/Hotels/GetAll')
        const card = document.createElement("div");
        card.className = "hotelrooms";
        const firstRoom = hotel.rooms && hotel.rooms.length > 0 ? hotel.rooms[0] : null;
-       const price = `${hotel.rooms.pricePerNight}`
-       const image = hotel.featuredImage;
+       const image = firstRoom && firstRoom.images && firstRoom.images.length > 0 ? firstRoom.images[0].source : "";
        
        card.innerHTML = `
            <img src="${image}" alt="${hotel.name}" style="width: 100%; height: 200px; object-fit: cover;">
            <h2>${hotel.name}</h2>
-           <p class="price"><strong>ფასი: ${hotel.rooms.pricePerNight} $</strong></p>
+           <p class="price"><strong>ფასი: ${firstRoom ? firstRoom.pricePerNight : 0} $</strong></p>
            <p><strong>მისამართი:</strong> ${hotel.address}</p>
            <p><strong>ქალაქი:</strong> ${hotel.city}</p>
-           <p><strong>ოთახების რაოდენობა:</strong> ${hotel.rooms ? hotel.rooms.length : 0}</p>
-           
-           
-       `;
+           <p><strong>ოთახების რაოდენობა:</strong> ${hotel.rooms ? hotel.rooms.length : 0}</p>`;
        roomsContainer.appendChild(card);
    })
 });
