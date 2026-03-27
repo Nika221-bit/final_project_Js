@@ -6,6 +6,7 @@ fetch('https://hotelbooking.stepprojects.ge/api/Hotels/GetHotel/1', {
 })
 .then((response) => response.json())
 .then((data) => {
+   
    const roomsContainer = document.getElementById("rooms");
    if (!roomsContainer) {
        console.error("Element with id='rooms' არ არსებობს!");
